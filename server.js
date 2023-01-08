@@ -3,13 +3,12 @@ const fs = require('fs')
 const app = express()
 
 class Producto{
-    constructor(nombre, precio, urlFoto){
-        this.id = id;
-        this.timestamp = timestamp;
+    constructor(nombre, descripcion, codigo, urlFoto, precio){
         this.nombre = nombre;
         this.descripcion = descripcion;
-        this.precio = precio;
+        this.precio = Number;
         this.urlFoto = urlFoto;
+        this.codigo = codigo;
     }
 
     //Recibe un objeto, lo guarda en el archivo, devuelve el id asignado
@@ -28,7 +27,7 @@ class Producto{
                 let stock = 1;
                 objetos.map(objeto => {
                     if(objeto.stock != null){
-                        stock++
+                        stock++;
                     }                    
                 });
                 let timestamp = new Date.now();
@@ -68,14 +67,14 @@ class Producto{
 
     //Elimina del archivo el objeto con el id buscado
     deleteById(id){
-        fs.readFile('Entregas/AntuñaContalVictor_ManejoDeArchivos/productos.txt', 'utf-8', (error, contenido) => {
+        fs.readFile('productos.txt', 'utf-8', (error, contenido) => {
             if (error) {
                 console.log(error);
             } else {
                 let objetos = [JSON.parse(contenido)]
                 let objetoAEliminar = objetos.find(objeto => objeto.id === id)
                 objetos.splice(objetoAEliminar - 1);
-                fs.promises.writeFile('Entregas/AntuñaContalVictor_ManejoDeArchivos/productos.txt', JSON.stringify(objetos, ',', 2))
+                fs.promises.writeFile('productos.txt', JSON.stringify(objetos, ',', 2))
                     .then(() => console.log(`Objeto eliminado`))
                     .catch( error => console.log(error))
                 }     
@@ -85,7 +84,7 @@ class Producto{
 
     //Elimina todos los objetos presentes en el archivo
     deleteAll(){
-        fs.truncate('Entregas/AntuñaContalVictor_ManejoDeArchivos/productos.txt', 0 , (error) => {
+        fs.truncate('productos.txt', 0 , (error) => {
         if (error) {
             console.log(error);
         } else {
