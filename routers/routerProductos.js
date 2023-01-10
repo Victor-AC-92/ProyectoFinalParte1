@@ -1,10 +1,11 @@
+const express = require('express')
 const routeProducto = require('express').Router()
 const routeCliente = require('express').Router()
 routeCliente.use(express.json())
 routeCliente.use(express.urlencoded({extended: true}))
 routeProducto.use(express.json())
 routeProducto.use(express.urlencoded({extended: true}))
-const producto = new Producto()
+
 
 class Producto{
     constructor(id, timestamp, nombre, descripcion, codigo, urlFoto, precio, stock){
@@ -104,6 +105,8 @@ class Producto{
     })
     } 
 }
+
+const producto = new Producto()
 
 routeCliente.get('/:id?', (req, res) => {
     let idProducto = parseInt(req.params.id)

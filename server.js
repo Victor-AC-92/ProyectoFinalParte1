@@ -1,9 +1,9 @@
-const { time } = require('console')
-const exp = require('constants')
-const { Router } = require('express')
 const express = require('express')
 const fs = require('fs')
 const app = express()
+const routeCarrito = require('./routers/routerCarritos')
+const routeProducto = require('./routers/routerProductos')
+const routeCliente = require('./routers/routerProductos')
 
 let productos = []
 let carritos = []
