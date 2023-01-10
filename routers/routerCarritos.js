@@ -1,6 +1,6 @@
 const express = require('express')
 const fs = require('fs')
-const routeCarrito = require('express').Router()
+const routeCarrito = express.Router()
 routeCarrito.use(express.json())
 routeCarrito.use(express.urlencoded({extended: true}))
 class Carrito{

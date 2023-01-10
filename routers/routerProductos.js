@@ -1,9 +1,6 @@
 const express = require('express')
 const fs = require('fs')
 const routeProducto = express.Router()
-const routeCliente = express.Router()
-routeCliente.use(express.json())
-routeCliente.use(express.urlencoded({extended: true}))
 routeProducto.use(express.json())
 routeProducto.use(express.urlencoded({extended: true}))
 
@@ -109,7 +106,7 @@ class Producto{
 let productos = []
 const producto = new Producto()
 
-routeCliente.get('/:id?', (req, res) => {
+routeProducto.get('/:id?', (req, res) => {
     let idProducto = parseInt(req.params.id)
     producto.getById(idProducto)
     res.send(`Producto/s encontrado/s: ${producto.getById(idProducto)}`)
@@ -140,4 +137,3 @@ routeProducto.delete('/:id', (req, res) => {
 })
 
 module.exports = routeProducto
-module.exports = routeCliente
