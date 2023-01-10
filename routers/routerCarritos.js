@@ -1,4 +1,5 @@
 const express = require('express')
+const fs = require('fs')
 routeCarrito = require('express').Router()
 routeCarrito.use(express.json())
 routeCarrito.use(express.urlencoded({extended: true}))
@@ -63,8 +64,8 @@ class Carrito{
 
 const carrito = new Carrito()
 
-routeCarrito.post('/', (req,res) =>{
-
+routeCarrito.post('/', (req, res) =>{
+    carrito.create()
 })
 
 routeCarrito.delete('/:id', (req, res) => {

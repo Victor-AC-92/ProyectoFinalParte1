@@ -1,11 +1,11 @@
 const express = require('express')
-const routeProducto = require('express').Router()
-const routeCliente = require('express').Router()
+const fs = require('fs')
+const routeProducto = express.Router()
+const routeCliente = express.Router()
 routeCliente.use(express.json())
 routeCliente.use(express.urlencoded({extended: true}))
 routeProducto.use(express.json())
 routeProducto.use(express.urlencoded({extended: true}))
-
 
 class Producto{
     constructor(id, timestamp, nombre, descripcion, codigo, urlFoto, precio, stock){

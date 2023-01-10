@@ -1,9 +1,9 @@
 const express = require('express')
 const fs = require('fs')
 const app = express()
-const routeCarrito = require('./routers/routerCarritos')
-const routeProducto = require('./routers/routerProductos')
-const routeCliente = require('./routers/routerProductos')
+const routeCarrito = require('./routers/routerCarritos.js')
+const routeProducto = require('./routers/routerProductos.js')
+const routeCliente = require('./routers/routerProductos.js')
 
 let productos = []
 let carritos = []
