@@ -5,16 +5,13 @@ const routeCarrito = require('./routers/routerCarritos.js')
 const routeProducto = require('./routers/routerProductos.js')
 const routeCliente = require('./routers/routerProductos.js')
 
-let productos = []
-let carritos = []
-
-//Configuracion PUG
 app.set('views', './views')
 app.set('view engine', 'pug')
 
-
-app.use('/api/productos', routeCliente)
+app.use(express.json())
+app.use(express.urlencoded({extended: true}))
 app.use('/api/productos', routeProducto)
+app.use('/api/productos', routeCliente)
 app.use('/api/carrito', routeCarrito)
 
 const PORT = 8080

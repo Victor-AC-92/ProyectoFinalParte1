@@ -1,6 +1,6 @@
 const express = require('express')
 const fs = require('fs')
-routeCarrito = require('express').Router()
+const routeCarrito = require('express').Router()
 routeCarrito.use(express.json())
 routeCarrito.use(express.urlencoded({extended: true}))
 class Carrito{
@@ -10,7 +10,7 @@ class Carrito{
     }
 
     create(){
-        fs.readFile('carrito.txt', 'utf-8', (error, contenido) => {
+        fs.readFile('./arrays/carrito.txt', 'utf-8', (error, contenido) => {
             if (error){
                 console.log(error);
             } else {
@@ -32,7 +32,7 @@ class Carrito{
     }
 
     delete(id){
-        fs.readFile('carrito.txt', 'utf-8', (error, contenido) => {
+        fs.readFile('./arrays/carrito.txt', 'utf-8', (error, contenido) => {
             if (error) {
                 console.log(error);                
             } else {
@@ -48,7 +48,7 @@ class Carrito{
     }
 
     getProducts(id){
-        fs.readFile('carrito.txt', 'utf-8', (error, contenido) => {
+        fs.readFile('./arrays/carrito.txt', 'utf-8', (error, contenido) => {
             if (error) {
                 console.log(error);                
             } else {
@@ -62,6 +62,7 @@ class Carrito{
     }
 }
 
+let carritos = []
 const carrito = new Carrito()
 
 routeCarrito.post('/', (req, res) =>{

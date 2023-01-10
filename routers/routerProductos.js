@@ -21,7 +21,7 @@ class Producto{
 
     //Recibe un producto, lo guarda en el archivo, devuelve el id asignado
     save(nombre,descripcion,codigo,urlFoto,precio){
-        fs.readFile('productos.txt', 'utf-8', (error, contenido) => {
+        fs.readFile('./arrays/productos.txt', 'utf-8', (error, contenido) => {
             if (error){
                 console.log(error);
             } else {
@@ -41,7 +41,7 @@ class Producto{
                 })
                 let productoPush = {id, timestamp, nombre, descripcion, codigo, urlFoto, precio, stock}
                 productos.push(productoPush)
-                fs.promises.writeFile('productos.txt', JSON.stringify(productos, ',', 2))
+                fs.promises.writeFile('./arrays/productos.txt', JSON.stringify(productos, ',', 2))
                     .then(() => console.log(`Producto guardado, su id es ${id}`))
                     .catch( error => console.log(error))
                 }          
@@ -50,7 +50,7 @@ class Producto{
 
     //Recibe un id y devuelve el producto con ese id, o todos los productos si no se especifica.
     getById(id){
-        fs.readFile('productos.txt', 'utf-8', (error, contenido) => {
+        fs.readFile('./arrays/productos.txt', 'utf-8', (error, contenido) => {
             if (error) {
                 console.log(error);
             } else {
@@ -67,7 +67,7 @@ class Producto{
 
     //Devuelve un array con los productos presentes en el archivo
     getAll(){
-        fs.readFile('productos.txt', 'utf-8', (error, contenido) => {
+        fs.readFile('./arrays/productos.txt', 'utf-8', (error, contenido) => {
             if (error) {
                 console.log(error);
             } else {
@@ -79,14 +79,14 @@ class Producto{
 
     //Elimina del archivo el producto con el id buscado
     deleteById(id){
-        fs.readFile('productos.txt', 'utf-8', (error, contenido) => {
+        fs.readFile('./arrays/productos.txt', 'utf-8', (error, contenido) => {
             if (error) {
                 console.log(error);
             } else {
                 let productos = JSON.parse(contenido)
                 let productoAEliminar = productos.find(producto => producto.id === id)
                 productos.splice(productoAEliminar - 1);
-                fs.promises.writeFile('productos.txt', JSON.stringify(productos, ',', 2))
+                fs.promises.writeFile('./arrays/productos.txt', JSON.stringify(productos, ',', 2))
                     .then(() => console.log(`Producto eliminado`))
                     .catch( error => console.log(error))
                 }     
@@ -96,7 +96,7 @@ class Producto{
 
     //Elimina todos los productos presentes en el archivo
     deleteAll(){
-        fs.truncate('productos.txt', 0 , (error) => {
+        fs.truncate('./arrays/productos.txt', 0 , (error) => {
         if (error) {
             console.log(error);
         } else {
@@ -106,6 +106,7 @@ class Producto{
     } 
 }
 
+let productos = []
 const producto = new Producto()
 
 routeCliente.get('/:id?', (req, res) => {
