@@ -60,6 +60,25 @@ class Carrito{
             }
         )
     }
+
+    deleteProduct(idCarrito, idProductoAEliminar){
+        fs.readFile('./arrays/carrito.txt', 'utf-8', (error, contenido) => {
+            if (error) {
+                console.log(error);                
+            } else {
+                let carritos = JSON.parse(contenido)
+                let carroAEncontrar = carritos.find(carro => carro.id === id)
+                let productosCarrito = carroAEncontrar.productosC
+                let prodAEliminar = productosCarrito.find(producto => producto.id === idProductoAEliminar)
+                productosCarrito.splice(prodAEliminar - 1)
+                fs.promises.writeFile('carritos.txt', JSON.stringify(carritos, ',', 2))
+                    .then(() => console.log(`Producto eliminado del carrito ${idCarrito}`))
+                    .catch( error => console.log(error))
+                console.log(productosCarrito);
+                }
+            }
+        )
+    }
 }
 
 let carritos = []
@@ -70,19 +89,33 @@ routeCarrito.post('/', (req, res) =>{
 })
 
 routeCarrito.delete('/:id', (req, res) => {
-
+    let idCarrito = req.params.id
+    carrito.delete(idCarrito)
 })
 
 routeCarrito.get('/:id/productos', (req, res) => {
-
+    let idCarrito = req.params.id
+    carrito.getProducts(idCarrito)
 })
 
 routeCarrito.post('/:id/productos', (req, res) => {
+    let idProductoBuscado = req.params.id
+    fs.readFile('./arrays/productos.txt', 'utf-8', (error, contenido) => {
+        if (error) {
+            console.log(error);
+        } else {
+            let productosArray = JSON.parse(contenido)
+            let productoBuscado = productosArray.find(producto => producto.id === idProductoBuscado)
+        }
+    })
 
+    
 })
 
 routeCarrito.delete('/:id/productos/:id_prod', (req, res) => {
-
+    let idCarrito = req.params.id
+    let idProductoAEliminar = req.params.id_prod
+    carrito.deleteProduct(idCarrito, idProductoAEliminar)    
 })
 
 module.exports = routeCarrito
