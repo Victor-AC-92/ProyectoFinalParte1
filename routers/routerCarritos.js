@@ -3,6 +3,7 @@ const fs = require('fs')
 const routeCarrito = express.Router()
 routeCarrito.use(express.json())
 routeCarrito.use(express.urlencoded({extended: true}))
+
 class Carrito{
     constructor(id, timestampCarrito){
         this.id = id;

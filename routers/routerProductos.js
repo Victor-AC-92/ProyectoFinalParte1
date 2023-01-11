@@ -113,7 +113,7 @@ routeProducto.get('/:id?', (req, res) => {
 })
 
 routeProducto.post('/', (req, res) => {
-    producto.save(req.body);
+    producto.save(req.body)
     res.send(`El producto "${req.body.nombre}" ha sido agregado al listado.`)
 })
 
