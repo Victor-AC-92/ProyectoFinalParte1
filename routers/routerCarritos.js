@@ -114,7 +114,7 @@ routeCarrito.post('/:id/productos/:id_prod', (req, res) => {
     carrito.getProducts(idCarrito)
     productosCarrito.push(productoBuscado)
     fs.promises.writeFile('carritos.txt', JSON.stringify(carritos, ',', 2))
-                    .then(() => console.log(`Producto eliminado del carrito ${idCarrito}`))
+                    .then(() => console.log(`Producto actualizado a ${productoBuscado.nombre}`))
                     .catch( error => console.log(error))
                 console.log(productosCarrito);
 })
