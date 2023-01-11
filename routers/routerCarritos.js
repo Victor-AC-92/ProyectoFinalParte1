@@ -4,13 +4,14 @@ const routeCarrito = express.Router()
 routeCarrito.use(express.json())
 routeCarrito.use(express.urlencoded({extended: true}))
 class Carrito{
-    constructor(id, productosC){
+    constructor(id, timestampCarrito){
         this.id = id;
+        this.timestampCarrito = timestampCarrito;
         this.productosC = [];
     }
 
     create(){
-        fs.readFile('./arrays/carrito.txt', 'utf-8', (error, contenido) => {
+        fs.readFile('./arrays/carritos.txt', 'utf-8', (error, contenido) => {
             if (error){
                 console.log(error);
             } else {
@@ -21,18 +22,18 @@ class Carrito{
                         id++
                     }                    
                 })
-                let timestampCarrito = new Date.now()
-                let carritoNuevo = new Carrito(id, timestampCarrito, productosC)
+                let timestampCarrito = new Date().toLocaleString()
+                let carritoNuevo = new Carrito(id, timestampCarrito)
                 carritos.push(carritoNuevo)
-                fs.promises.writeFile('carritos.txt', JSON.stringify(carritos, ',', 2))
-                    .then(() => console.log(`Carrito guardado, su id es ${id}`))
+                fs.promises.writeFile('./arrays/carritos.txt', JSON.stringify(carritos, ',', 2))
+                    .then(() => console.log(`Carrito creado, su id es ${id}`))
                     .catch( error => console.log(error))
                 }          
             });
     }
 
     delete(id){
-        fs.readFile('./arrays/carrito.txt', 'utf-8', (error, contenido) => {
+        fs.readFile('./arrays/carritos.txt', 'utf-8', (error, contenido) => {
             if (error) {
                 console.log(error);                
             } else {
@@ -48,7 +49,7 @@ class Carrito{
     }
 
     getProducts(id){
-        fs.readFile('./arrays/carrito.txt', 'utf-8', (error, contenido) => {
+        fs.readFile('./arrays/carritos.txt', 'utf-8', (error, contenido) => {
             if (error) {
                 console.log(error);                
             } else {
@@ -62,7 +63,7 @@ class Carrito{
     }
 
     deleteProduct(idCarrito, idProductoAEliminar){
-        fs.readFile('./arrays/carrito.txt', 'utf-8', (error, contenido) => {
+        fs.readFile('./arrays/carritos.txt', 'utf-8', (error, contenido) => {
             if (error) {
                 console.log(error);                
             } else {
@@ -86,6 +87,7 @@ const carrito = new Carrito()
 
 routeCarrito.post('/', (req, res) =>{
     carrito.create()
+    res.send('Carrito creado')
 })
 
 routeCarrito.delete('/:id', (req, res) => {
