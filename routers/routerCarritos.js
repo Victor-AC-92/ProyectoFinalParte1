@@ -98,18 +98,25 @@ routeCarrito.get('/:id/productos', (req, res) => {
     carrito.getProducts(idCarrito)
 })
 
-routeCarrito.post('/:id/productos', (req, res) => {
-    let idProductoBuscado = req.params.id
+routeCarrito.post('/:id/productos/:id_prod', (req, res) => {
+    let idCarrito = req.params.id
+    let idProductoBuscado = req.params.id_prod
     fs.readFile('./arrays/productos.txt', 'utf-8', (error, contenido) => {
         if (error) {
             console.log(error);
         } else {
             let productosArray = JSON.parse(contenido)
             let productoBuscado = productosArray.find(producto => producto.id === idProductoBuscado)
+            return productoBuscado
         }
     })
 
-    
+    carrito.getProducts(idCarrito)
+    productosCarrito.push(productoBuscado)
+    fs.promises.writeFile('carritos.txt', JSON.stringify(carritos, ',', 2))
+                    .then(() => console.log(`Producto eliminado del carrito ${idCarrito}`))
+                    .catch( error => console.log(error))
+                console.log(productosCarrito);
 })
 
 routeCarrito.delete('/:id/productos/:id_prod', (req, res) => {
