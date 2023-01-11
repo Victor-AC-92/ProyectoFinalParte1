@@ -125,4 +125,4 @@ routeCarrito.delete('/:id/productos/:id_prod', (req, res) => {
     carrito.deleteProduct(idCarrito, idProductoAEliminar)    
 })
 
-module.exports = routeCarrito
+module.exports = routeCarrito;

@@ -136,4 +136,4 @@ routeProducto.delete('/:id', (req, res) => {
     res.send(`El producto ${producto.id} ha sido eliminado.`)
 })
 
-module.exports = routeProducto
+module.exports = routeProducto;
