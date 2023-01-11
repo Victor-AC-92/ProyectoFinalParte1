@@ -93,11 +93,12 @@ routeCarrito.post('/', (req, res) =>{
 routeCarrito.delete('/:id', (req, res) => {
     let idCarrito = req.params.id
     carrito.delete(idCarrito)
+    res.send(`Carrito ${idCarrito} eliminado`)
 })
 
 routeCarrito.get('/:id/productos', (req, res) => {
     let idCarrito = req.params.id
-    carrito.getProducts(idCarrito)
+    res.send(carrito.getProducts(idCarrito))
 })
 
 routeCarrito.post('/:id/productos/:id_prod', (req, res) => {
