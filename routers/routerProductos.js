@@ -103,21 +103,21 @@ class Producto{
         }
     })
     } 
-}
+};
 
-let productos = []
-const producto = new Producto()
+let productos = [];
+const producto = new Producto();
 
 routeProducto.get('/:id?', (req, res) => {
     let idProducto = parseInt(req.params.id)
     producto.getById(idProducto)
     res.send(`Producto/s encontrado/s: ${producto.getById(idProducto)}`)
-})
+});
 
 routeProducto.post('/', (req, res) => {
     producto.save(req.body)
     res.send(`El producto "${req.body.nombre}" ha sido agregado al listado.`)
-})
+});
 
 routeProducto.put('/:id', (req, res) =>{
     let idProducto = parseInt(req.params.id)
@@ -128,7 +128,7 @@ routeProducto.put('/:id', (req, res) =>{
     nuevoProducto.id = idProducto
     
     res.send(`El producto ${idProducto} ha sido actualizado a ${nuevoProducto.nombre}`)
-})
+});
 
 routeProducto.delete('/:id', (req, res) => {
     producto.deleteById(parseInt(req.params.id))
@@ -136,6 +136,6 @@ routeProducto.delete('/:id', (req, res) => {
     res.json(productos)
 
     res.send(`El producto ${producto.id} ha sido eliminado.`)
-})
+});
 
 module.exports = routeProducto;
