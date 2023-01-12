@@ -54,10 +54,10 @@ class Producto{
                 if (id!=null) {
                     let productos = JSON.parse(contenido)
                     let productoBuscado = productos.find(producto => producto.id === id)
-                    console.log(productoBuscado)
+                    console.log(JSON.stringify(productoBuscado))
                     return productoBuscado
                 } else {
-                    console.log(JSON.parse(contenido))
+                    console.log(contenido)
                     return contenido
                 }
             }
