@@ -46,15 +46,15 @@ class Producto{
     }
 
     //Recibe un id y devuelve el producto con ese id, o todos los productos si no se especifica.
-    getById(id){
+    getById(idProducto){
         fs.readFile('./arrays/productos.txt', 'utf-8', (error, contenido) => {
             if (error) {
                 console.log(error);
             } else {
-                if (id!=null) {
+                if (producto.id!=null) {
                     let productos = JSON.parse(contenido)
-                    let productoBuscado = productos.find(producto => producto.id === id)
-                    console.log(JSON.stringify(productoBuscado))
+                    let productoBuscado = productos.find((producto) => producto.id === idProducto)
+                    console.log(productoBuscado)
                     return productoBuscado
                 } else {
                     console.log(contenido)
@@ -109,9 +109,10 @@ let productos = [];
 const producto = new Producto();
 
 routeProducto.get('/:id?', (req, res) => {
-    let idProducto = parseInt(req.params.id)
-    producto.getById(idProducto)
-    res.send(`Producto/s encontrado/s: ${producto.getById(idProducto)}`)
+    let idProducto = parseInt(req.params)
+    console.log(idProducto);
+    let productoEncontrado = producto.getById(idProducto)
+    res.send(`Producto/s encontrado/s: ${productoEncontrado}`)
 });
 
 routeProducto.post('/', (req, res) => {
