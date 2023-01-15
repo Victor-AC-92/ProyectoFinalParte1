@@ -30,12 +30,13 @@ class Producto{
                     }                    
                 })
                 let timestamp = new Date().toLocaleString()
+                
                 let stock = 1
-                productos.map(producto => {
-                    if(producto.stock != null){
-                        stock++
-                    }                    
-                })
+                let prodStockPrevio = productos.findLast(({nombre}) => nombre == nombre)
+                console.log(prodStockPrevio);
+                let stockPrevio = prodStockPrevio.stock
+                stock = stockPrevio+1                
+                
                 let productoPush = {id, timestamp, nombre, descripcion, codigo, urlFoto, precio, stock}
                 productos.push(productoPush)
                 fs.promises.writeFile('./arrays/productos.txt', JSON.stringify(productos, ',', 2))
@@ -51,13 +52,12 @@ class Producto{
             if (error) {
                 console.log(error);
             } else {
-                if (producto.id!=null) {
+                if (idProducto != null) {
                     let productos = JSON.parse(contenido)
-                    let productoBuscado = productos.find((producto) => producto.id === idProducto)
+                    let productoBuscado = productos.find(({id}) => id == idProducto)
                     console.log(productoBuscado)
-                    return productoBuscado
                 } else {
-                    console.log(contenido)
+                    /* console.log(contenido) */
                     return contenido
                 }
             }
@@ -70,7 +70,7 @@ class Producto{
             if (error) {
                 console.log(error);
             } else {
-                let productos = JSON.parse(contenido)
+                let productos = contenido
                 console.log(`Estos son los productos disponibles: ${productos}`);
             }
         })
@@ -109,10 +109,14 @@ let productos = [];
 const producto = new Producto();
 
 routeProducto.get('/:id?', (req, res) => {
-    let idProducto = parseInt(req.params)
+    let idProducto = parseInt(req.params.id)
     console.log(idProducto);
-    let productoEncontrado = producto.getById(idProducto)
-    res.send(`Producto/s encontrado/s: ${productoEncontrado}`)
+    /* producto.getById(idProducto) */
+    if(idProducto != Number){
+        producto.getAll()
+    } else {
+        producto.getById(idProducto)
+    }
 });
 
 routeProducto.post('/', (req, res) => {
