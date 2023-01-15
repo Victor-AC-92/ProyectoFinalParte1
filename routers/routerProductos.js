@@ -17,7 +17,7 @@ class Producto{
     }
 
     //Recibe un producto, lo guarda en el archivo, devuelve el id asignado
-    save(nombre,descripcion,codigo,urlFoto,precio){
+    save(productoNuevo){
         fs.readFile('./arrays/productos.txt', 'utf-8', (error, contenido) => {
             if (error){
                 console.log(error);
@@ -32,12 +32,18 @@ class Producto{
                 let timestamp = new Date().toLocaleString()
                 
                 let stock = 1
-                let prodStockPrevio = productos.findLast(({nombre}) => nombre == nombre)
-                console.log(prodStockPrevio);
-                let stockPrevio = prodStockPrevio.stock
-                stock = stockPrevio+1                
+                let prodStockPrevio = productos.findLast(({nombre}) => nombre == productoNuevo.nombre)
+                if(prodStockPrevio != undefined){
+                    prodStockPrevio.stock++
+                    fs.promises.writeFile('./arrays/productos.txt', JSON.stringify(productos, ',', 2))
+                    .then(() => console.log(`Producto guardado, su id es ${prodStockPrevio.id}`))
+                    .catch( error => console.log(error))
+                    return
+                }else{
+                    stock = 1
+                }                
                 
-                let productoPush = {id, timestamp, nombre, descripcion, codigo, urlFoto, precio, stock}
+                let productoPush = {id, timestamp, ...productoNuevo, stock}
                 productos.push(productoPush)
                 fs.promises.writeFile('./arrays/productos.txt', JSON.stringify(productos, ',', 2))
                     .then(() => console.log(`Producto guardado, su id es ${id}`))
@@ -52,14 +58,10 @@ class Producto{
             if (error) {
                 console.log(error);
             } else {
-                if (idProducto != null) {
-                    let productos = JSON.parse(contenido)
-                    let productoBuscado = productos.find(({id}) => id == idProducto)
-                    console.log(productoBuscado)
-                } else {
-                    /* console.log(contenido) */
-                    return contenido
-                }
+                let productos = JSON.parse(contenido)
+                let productoBuscado = productos.find(({id}) => id == idProducto)
+                console.log(productoBuscado);
+                return productoBuscado              
             }
         })
     }
@@ -76,15 +78,32 @@ class Producto{
         })
     }
 
-    //Elimina del archivo el producto con el id buscado
-    deleteById(id){
+    update(idProducto, nuevoProducto){
         fs.readFile('./arrays/productos.txt', 'utf-8', (error, contenido) => {
             if (error) {
                 console.log(error);
             } else {
                 let productos = JSON.parse(contenido)
-                let productoAEliminar = productos.find(producto => producto.id === id)
-                productos.splice(productoAEliminar - 1);
+                let prodParaActualizar = productos.find(({id}) => id == idProducto)
+                let prodActualizado = {...prodParaActualizar, ...nuevoProducto}
+                productos.splice(productos.indexOf(prodParaActualizar), 1)
+                productos.push(prodActualizado)
+                fs.promises.writeFile('./arrays/productos.txt', JSON.stringify(productos, ',', 2))
+                    .then(() => console.log(`Producto actualizado`))
+                    .catch( error => console.log(error))
+            }
+        })
+    }
+
+    //Elimina del archivo el producto con el id buscado
+    deleteById(idProducto){
+        fs.readFile('./arrays/productos.txt', 'utf-8', (error, contenido) => {
+            if (error) {
+                console.log(error);
+            } else {
+                let productos = JSON.parse(contenido)
+                let productoAEliminar = productos.find(({id}) => id == idProducto)
+                productos.splice(productos.indexOf(productoAEliminar));
                 fs.promises.writeFile('./arrays/productos.txt', JSON.stringify(productos, ',', 2))
                     .then(() => console.log(`Producto eliminado`))
                     .catch( error => console.log(error))
@@ -111,8 +130,7 @@ const producto = new Producto();
 routeProducto.get('/:id?', (req, res) => {
     let idProducto = parseInt(req.params.id)
     console.log(idProducto);
-    /* producto.getById(idProducto) */
-    if(idProducto != Number){
+    if(isNaN(idProducto)){
         producto.getAll()
     } else {
         producto.getById(idProducto)
@@ -120,27 +138,24 @@ routeProducto.get('/:id?', (req, res) => {
 });
 
 routeProducto.post('/', (req, res) => {
-    producto.save(req.body)
+    let productoNuevo = req.body
+    producto.save(productoNuevo)
     res.send(`El producto "${req.body.nombre}" ha sido agregado al listado.`)
 });
 
 routeProducto.put('/:id', (req, res) =>{
     let idProducto = parseInt(req.params.id)
     let nuevoProducto = req.body
-    let indiceProducto = productos.findIndex(producto => producto.id == idProducto)
-    productos.splice(indiceProducto, 1)
-    producto.save(nuevoProducto)
-    nuevoProducto.id = idProducto
-    
+    producto.update(idProducto, nuevoProducto)
+    /* producto.deleteById(idProducto)
+    producto.save(nuevoProducto) */
     res.send(`El producto ${idProducto} ha sido actualizado a ${nuevoProducto.nombre}`)
 });
 
 routeProducto.delete('/:id', (req, res) => {
-    producto.deleteById(parseInt(req.params.id))
-        
-    res.json(productos)
-
-    res.send(`El producto ${producto.id} ha sido eliminado.`)
+    let idProducto = parseInt(req.params.id)
+    res.send(`El producto ${req.params.id} ha sido eliminado.`)
+    producto.deleteById(idProducto)    
 });
 
 module.exports = routeProducto;
