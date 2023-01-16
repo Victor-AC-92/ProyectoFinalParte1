@@ -10,7 +10,7 @@ app.set('view engine', 'pug')
 app.use(express.json())
 app.use(express.urlencoded({extended: true}))
 app.use('/api/productos', routeProducto)
-app.use('/api/carrito', routeCarrito)
+app.use('/api/carritos', routeCarrito)
 
 const PORT = 8080
 const server = app.listen(PORT, () => {

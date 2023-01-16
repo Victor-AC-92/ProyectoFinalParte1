@@ -147,8 +147,6 @@ routeProducto.put('/:id', (req, res) =>{
     let idProducto = parseInt(req.params.id)
     let nuevoProducto = req.body
     producto.update(idProducto, nuevoProducto)
-    /* producto.deleteById(idProducto)
-    producto.save(nuevoProducto) */
     res.send(`El producto ${idProducto} ha sido actualizado a ${nuevoProducto.nombre}`)
 });
 

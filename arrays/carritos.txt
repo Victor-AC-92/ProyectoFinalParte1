@@ -1,3 +1,17 @@
 [
   {},
+  {
+    "id": 1,
+    "timestampCarrito": "15/1/2023, 19:50:33",
+    "productosC": [
+      "{\"id\":4,\"timestamp\":\"15/1/2023, 19:31:15\",\"nombre\":\"Leche\",\"descripcion\":\"Carton de 1 litro de leche\",\"codigo\":\"001\",\"urlFoto\":\"url\",\"precio\":200,\"stock\":7}"
+    ]
+  },
+  {
+    "id": 2,
+    "timestampCarrito": "15/1/2023, 22:12:41",
+    "productosC": [
+      "{\"id\":2,\"timestamp\":\"15/1/2023, 19:43:05\",\"nombre\":\"Arroz\",\"descripcion\":\"Caja de 1 kg de arroz\",\"codigo\":\"002\",\"urlFoto\":\"url\",\"precio\":250,\"stock\":2}"
+    ]
+  }
 ]

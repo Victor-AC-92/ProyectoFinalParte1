@@ -33,15 +33,15 @@ class Carrito{
             });
     }
 
-    delete(id){
+    delete(idCarrito){
         fs.readFile('./arrays/carritos.txt', 'utf-8', (error, contenido) => {
             if (error) {
                 console.log(error);                
             } else {
                 let carritos = JSON.parse(contenido)
-                let carroAEncontrar = carritos.find(carro => carro.id === id)
-                carritos.splice(carroAEncontrar - 1)
-                fs.promises.writeFile('carritos.txt', JSON.stringify(carritos, ',', 2))
+                let carroAEncontrar = carritos.find(({id}) => id == idCarrito)
+                carritos.splice(carritos.indexOf(carroAEncontrar))
+                fs.promises.writeFile('./arrays/carritos.txt', JSON.stringify(carritos, ',', 2))
                     .then(() => console.log(`Carrito eliminado`))
                     .catch( error => console.log(error))
                 }
@@ -49,15 +49,15 @@ class Carrito{
         )
     }
 
-    getProducts(id){
+    getProducts(idCarrito){
         fs.readFile('./arrays/carritos.txt', 'utf-8', (error, contenido) => {
             if (error) {
                 console.log(error);                
             } else {
                 let carritos = JSON.parse(contenido)
-                let carroAEncontrar = carritos.find(carro => carro.id === id)
+                let carroAEncontrar = carritos.find(({id}) => id == idCarrito)
                 let productosCarrito = carroAEncontrar.productosC
-                console.log(productosCarrito);
+                return productosCarrito
                 }
             }
         )
@@ -69,14 +69,13 @@ class Carrito{
                 console.log(error);                
             } else {
                 let carritos = JSON.parse(contenido)
-                let carroAEncontrar = carritos.find(carro => carro.id === id)
+                let carroAEncontrar = carritos.find(({id}) => id == idCarrito)
                 let productosCarrito = carroAEncontrar.productosC
-                let prodAEliminar = productosCarrito.find(producto => producto.id === idProductoAEliminar)
-                productosCarrito.splice(prodAEliminar - 1)
-                fs.promises.writeFile('carritos.txt', JSON.stringify(carritos, ',', 2))
+                let prodAEliminar = productosCarrito.find(({id}) => id == idProductoAEliminar)
+                productosCarrito.splice(productosCarrito.indexOf(prodAEliminar), 1)
+                fs.promises.writeFile('./arrays/carritos.txt', JSON.stringify(carritos, ',', 2))
                     .then(() => console.log(`Producto eliminado del carrito ${idCarrito}`))
                     .catch( error => console.log(error))
-                console.log(productosCarrito);
                 }
             }
         )
@@ -105,22 +104,29 @@ routeCarrito.get('/:id/productos', (req, res) => {
 routeCarrito.post('/:id/productos/:id_prod', (req, res) => {
     let idCarrito = req.params.id
     let idProductoBuscado = req.params.id_prod
+    
     fs.readFile('./arrays/productos.txt', 'utf-8', (error, contenido) => {
         if (error) {
             console.log(error);
         } else {
             let productosArray = JSON.parse(contenido)
-            let productoBuscado = productosArray.find(producto => producto.id === idProductoBuscado)
-            return productoBuscado
+            let productoBuscado = productosArray.find(({id}) => id == idProductoBuscado)
+            fs.readFile('./arrays/carritos.txt', 'utf-8', (error, data) =>{
+                if (error) {
+                    (console.log(error))
+                } else {
+                    let carritos = JSON.parse(data)
+                    let carritoDestino = carritos.find(({id}) => id == idCarrito)
+                    let productosCarrito = carritoDestino.productosC
+                    productosCarrito.push(JSON.stringify(productoBuscado))
+                    console.log(carritos);
+                    fs.promises.writeFile('./arrays/carritos.txt', JSON.stringify(carritos, ',', 2))
+                        .then(() => console.log(`${productoBuscado.nombre} agregado al carrito ${idCarrito}`))
+                        .catch( error => console.log(error))
+                }
+            })
         }
-    })
-
-    carrito.getProducts(idCarrito)
-    productosCarrito.push(productoBuscado)
-    fs.promises.writeFile('carritos.txt', JSON.stringify(carritos, ',', 2))
-                    .then(() => console.log(`Producto actualizado a ${productoBuscado.nombre}`))
-                    .catch( error => console.log(error))
-                console.log(productosCarrito);
+    }) 
 })
 
 routeCarrito.delete('/:id/productos/:id_prod', (req, res) => {
