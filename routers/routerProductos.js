@@ -127,6 +127,8 @@ class Producto{
 let productos = [];
 const producto = new Producto();
 
+let admin = true;
+
 routeProducto.get('/:id?', (req, res) => {
     let idProducto = parseInt(req.params.id)
     console.log(idProducto);
